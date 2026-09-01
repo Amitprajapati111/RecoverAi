@@ -1,350 +1,529 @@
 # 🚀 RecoverAI
 
-### AI-Powered Payment Recovery & Intelligent Revenue Recovery Platform
+## AI-Powered Intelligent Payment Recovery Platform
 
-> **RecoverAI helps merchants recover failed payments safely using AI-powered recommendations, deterministic policy guardrails, secure webhooks, idempotent recovery actions, asynchronous processing, and real-time recovery analytics.**
+> **Recover failed payments. Recover revenue. Safely.**
 
-**AI recommends. Policy Engine authorizes.**
+### 🤖 AI recommends. 🛡️ Policy Engine authorizes. ⚡ System executes. 💰 Revenue gets recovered.
+
+RecoverAI is an AI-powered payment recovery platform designed to help merchants intelligently recover failed payments while maintaining strict **financial safety, idempotency, security, human oversight, and performance guarantees**.
 
 ---
 
-## 🎯 The Problem
+<div align="center">
 
-A failed payment does not necessarily mean lost revenue.
+### 🏆 KEY BENCHMARKS
 
-Payments can fail because of:
+|  🚀 Peak Load | ⚡ Peak Throughput | ✅ Error Rate | ⏱️ 1K VU p95 |
+| :-----------: | :---------------: | :----------: | :----------: |
+| **1,000 VUs** |  **2,164 req/s**  |   **0.00%**  |  **214 ms**  |
 
-* Insufficient funds
-* Bank declines
-* Bank timeouts
-* UPI timeouts
-* Customer abandonment
-* Temporary payment failures
+### 📈 DASHBOARD OPTIMIZATION
 
-Traditional payment systems often stop at:
+|          Before         |     After     |       Improvement       |
+| :---------------------: | :-----------: | :---------------------: |
+|     p95 **1,100 ms**    |   **107 ms**  |   🚀 **90.2% faster**   |
+|     p99 **1,170 ms**    |   **128 ms**  |   🚀 **89.1% faster**   |
+|      Avg **245 ms**     |  **38.69 ms** |   🚀 **84.2% faster**   |
+|      **123 req/s**      | **304 req/s** | 🚀 **2.47× throughput** |
+| MongoDB CPU **+159.6s** |   **+16.6s**  |  🚀 **~90% reduction**  |
+
+### 🧪 AUTOMATED TESTING
+
+**6 Test Suites · 21 Tests · 21 Passed · 0 Failed**
+
+</div>
+
+---
+
+# ⭐ Why RecoverAI?
+
+A payment failure should not necessarily be the end of the transaction.
+
+Traditional flow:
 
 ```text
-Payment Failed
-      ↓
-Transaction marked FAILED
-      ↓
-End
+Customer
+   ↓
+Payment Attempt
+   ↓
+❌ Payment Failed
+   ↓
+END
 ```
 
-RecoverAI changes this into:
+RecoverAI turns it into:
 
 ```text
-Payment Failed
-      ↓
-Failure Detected
-      ↓
-Webhook Verification
-      ↓
-Recovery Case
-      ↓
-AI Analysis
-      ↓
-Policy Engine
-      ↓
-Recovery Action
-      ↓
+Customer
+   ↓
+Payment Attempt
+   ↓
+❌ Payment Failed
+   ↓
+Webhook
+   ↓
+🔐 Verify Signature
+   ↓
+🔁 Check Idempotency
+   ↓
+📦 Create Recovery Case
+   ↓
+🤖 AI Analysis
+   ↓
+🛡️ Policy Engine
+   ↓
+┌──────────────────────┐
+│                      │
+▼                      ▼
+APPROVED             BLOCKED
+│                      │
+▼                      ▼
+Recovery Action      STOP
+│
+▼
 Customer Retry
-      ↓
-Payment Captured
-      ↓
-Recovered Revenue
-```
-
-The objective is simple:
-
-> **Don't just record failed payments. Recover them safely.**
-
----
-
-# 🧠 Core Idea
-
-RecoverAI separates **AI intelligence** from **financial authorization**.
-
-```text
-                 ┌───────────────────┐
-                 │   Failed Payment  │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │ Webhook Security  │
-                 │ HMAC + Validation │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │   Recovery Case   │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │    AI Analysis    │
-                 │ Probability/Plan  │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │   Policy Engine   │
-                 │   Authorization   │
-                 └─────────┬─────────┘
-                           │
-                 ┌─────────┴─────────┐
-                 │                   │
-                 ▼                   ▼
-             APPROVED             BLOCKED
-                 │                   │
-                 ▼                   ▼
-        Recovery Action          STOP/ESCALATE
-                 │
-                 ▼
-          Customer Payment
-                 │
-                 ▼
-        payment.captured
-                 │
-                 ▼
-             RECOVERED
-```
-
-### Key principle
-
-```text
-AI ≠ Financial Authority
-
-AI → Recommendation
-Policy Engine → Authorization
-Recovery Service → Execution
-Payment Gateway → Transaction
+│
+▼
+✅ Payment Captured
+│
+▼
+Webhook
+│
+▼
+⚙️ Worker
+│
+▼
+💰 RECOVERED
+│
+▼
+📊 Dashboard
 ```
 
 ---
 
-# ✨ Key Features
+# 🎯 The Core Innovation
 
-## 💳 Intelligent Payment Recovery
-
-RecoverAI detects failed payments and creates recovery cases that can move through an automated recovery lifecycle.
-
-Supported recovery states include:
+The most important architectural decision in RecoverAI is:
 
 ```text
-NEW
-ANALYZING
-RECOVERABLE
-NOT_RECOVERABLE
-IN_RECOVERY
-RECOVERED
-EXHAUSTED
-ESCALATED
-STOPPED
+                    AI
+                     │
+                     │ Recommendation
+                     ▼
+             ┌───────────────┐
+             │ Policy Engine │
+             └───────┬───────┘
+                     │
+                     │ Authorization
+                     ▼
+            Recovery Service
+                     │
+                     │ Execution
+                     ▼
+              Payment System
 ```
 
----
+### AI does NOT directly control money.
 
-## 🤖 AI-Powered Recovery Analysis
-
-The AI analyzes payment/recovery context and produces:
-
-* Recovery probability
-* Risk assessment
-* Recommended recovery action
-* Reasoning/context for the recommendation
-
-Example:
+The AI can recommend:
 
 ```text
-Recovery Probability: 82%
-
-Risk: LOW
-
-Recommended Action:
 CREATE_PAYMENT_LINK
+SEND_REMINDER
+RETRY_PAYMENT
+STOP
 ```
 
-However, AI recommendations are never directly executed.
+But the recommendation must pass through deterministic business policies before execution.
 
-Every recommendation must pass through the Policy Engine.
+This creates a critical separation:
+
+```text
+AI Intelligence
+       ≠
+Financial Authorization
+```
 
 ---
 
-# 🛡️ Deterministic Policy Engine
+# 🏆 What Makes This Project Strong
 
-The Policy Engine acts as a safety boundary between AI recommendations and financial actions.
-
-Example policy rules:
-
-### Recovery Probability
+RecoverAI combines several engineering concepts that normally appear separately:
 
 ```text
-Probability < 55%
-        ↓
-BLOCK
-```
-
-### High-Value Transaction
-
-```text
-Amount > ₹5,000
-        ↓
-Human Approval Required
-```
-
-### Maximum Attempts
-
-```text
-Attempts >= 3
-        ↓
-STOP / EXHAUSTED
-```
-
-### Normal Recoverable Payment
-
-```text
-Probability >= threshold
+🤖 AI Decision Making
         +
-Amount within autonomous limit
+🛡️ Deterministic Policy Guardrails
         +
-Attempts < maximum
-        ↓
-APPROVED
+🔐 Cryptographic Webhook Security
+        +
+🔁 Financial Idempotency
+        +
+👤 Human-in-the-Loop Approval
+        +
+⚙️ Asynchronous Workers
+        +
+🍃 MongoDB Query Optimization
+        +
+⚡ Redis Caching
+        +
+👥 RBAC
+        +
+🧪 Automated Testing
+        +
+📈 k6 Load Testing
 ```
 
-This prevents the AI from blindly executing financial actions.
+The project is therefore not simply an AI demo or CRUD application.
+
+It demonstrates how AI can be integrated into a **safety-critical financial workflow**.
 
 ---
 
-# 👤 Human-in-the-Loop Recovery
+# 📊 Performance Engineering
 
-High-risk financial actions can be escalated to humans.
+RecoverAI was benchmarked using **k6** across multiple concurrency levels.
 
-Example:
+## 🚀 Scaling Benchmark
+https://github.com/Amitprajapati111/RecoverAi/blob/main/Screenshot%202026-08-22%20173816.png?raw=true
+
+| Peak VUs | Total Requests |         Throughput | Avg Latency |           p95 | Error Rate |
+| -------: | -------------: | -----------------: | ----------: | ------------: | ---------: |
+|       50 |         15,486 |       154.81 req/s |     0.74 ms |       1.39 ms |     **0%** |
+|      100 |         42,577 |       327.50 req/s |     0.68 ms |       1.30 ms |     **0%** |
+|      500 |        146,788 |     1,333.82 req/s |    58.08 ms |     167.68 ms |     **0%** |
+|    1,000 |        346,452 | **2,164.24 req/s** |    82.36 ms | **214.01 ms** |     **0%** |
+
+### 1,000 VU Benchmark
 
 ```text
-Amount:
-₹15,000
-
-Recovery Probability:
-88%
-
-Policy:
-Autonomous limit = ₹5,000
-
-Result:
-ESCALATED
-
-requiresHumanApproval:
-true
+Peak VUs              1,000
+Total Requests        346,452
+Throughput            2,164.24 req/s
+Average Latency       82.36 ms
+Median Latency        68.56 ms
+p90                   200.34 ms
+p95                   214.01 ms
+p99                   229.34 ms
+Maximum               278.98 ms
+HTTP Error Rate       0.00%
 ```
 
-Only authorized roles such as `OWNER` and `ADMIN` can approve sensitive recovery actions.
+> **Note:** These are benchmark results from the tested local development environment and workload. They are not presented as production capacity guarantees.
+
+---
+
+# ⚡ Dashboard Performance Optimization
+
+During the initial authenticated dashboard benchmark, a clear bottleneck appeared.
+
+### Before Optimization
+
+```text
+100 VU
+
+Average      245 ms
+p95          1,100 ms
+p99          1,170 ms
+Throughput   ~123 req/s
+```
+
+MongoDB showed significant query computation during the dashboard workload.
+
+---
+
+## 🔧 Root Cause
+
+The dashboard triggered multiple aggregation operations for:
+
+```text
+Dashboard KPIs
+Recovery Funnel
+Failure Breakdown
+Recovery Trend
+```
+
+At higher concurrency, repeated aggregation work increased database pressure and pushed tail latency upward.
+
+---
+
+# 🚀 Optimization Applied
+
+### 1️⃣ Compound MongoDB Indexes
+
+Indexes were added/aligned around merchant and frequently queried fields.
+
+Examples:
+
+```javascript
+{ merchantId: 1, createdAt: -1, status: 1 }
+
+{ merchantId: 1, status: 1, failureType: 1, createdAt: -1 }
+
+{ merchantId: 1, status: 1, createdAt: -1 }
+
+{ merchantId: 1, createdAt: -1, amountAtRisk: 1, recoveredAmount: 1 }
+```
+
+### 2️⃣ Correct Merchant Scoping
+
+Aggregation pipelines were aligned with the merchant's MongoDB `ObjectId`.
+
+This allowed the query planner to use the relevant index prefixes rather than unnecessarily processing unrelated merchant data.
+
+### 3️⃣ Redis Dashboard Cache
+
+Dashboard aggregation responses use a short-lived cache.
+
+```text
+Cache Key:
+
+recoverai:dashboard:${merchantId}:${days}
+
+TTL:
+
+30 seconds
+```
+
+Redis failures have fallback handling so the application can continue where possible.
+
+---
+
+# 📈 Optimization Results
+
+```text
+                 BEFORE       AFTER
+
+p95               1100 ms       107 ms
+                  ███████████   █
+
+p99               1170 ms       128 ms
+                  ███████████   █
+
+Average             245 ms      38.69 ms
+                  █████████     ██
+
+Throughput          123 req/s   304 req/s
+                  ███           ███████
+```
+
+### Result
+
+* 🚀 **90.2% reduction in p95 latency**
+* 🚀 **89.1% reduction in p99 latency**
+* 🚀 **84.2% reduction in average latency**
+* 🚀 **2.47× throughput improvement**
+* 🚀 **~90% reduction in measured MongoDB CPU delta**
+* ✅ **0% HTTP failures**
 
 ---
 
 # 🔐 Webhook Security
 
-Payment webhooks are protected using multiple security layers.
+Payment webhooks are a critical attack surface.
 
-### HMAC-SHA256 Signature Verification
+RecoverAI implements a security gate before processing payment events.
 
-Incoming webhook signatures are verified using the configured webhook secret.
+```text
+Incoming Webhook
+       │
+       ▼
+Signature Present?
+       │
+       ▼
+HMAC-SHA256 Verification
+       │
+       ▼
+Timing-Safe Comparison
+       │
+       ▼
+Payload Validation
+       │
+       ▼
+Idempotency Check
+       │
+       ▼
+Queue Processing
+```
+
+## Tested Scenarios
+
+| Scenario          | Expected           | Result |
+| ----------------- | ------------------ | ------ |
+| Valid signature   | `200 OK`           | ✅      |
+| Invalid signature | `401 Unauthorized` | ✅      |
+| Malformed payload | `400 Bad Request`  | ✅      |
 
 The implementation uses:
 
-```text
-crypto.createHmac()
-crypto.timingSafeEqual()
+```javascript
+crypto.createHmac('sha256', secret)
+crypto.timingSafeEqual(...)
 ```
 
-This protects the webhook boundary against forged or tampered requests.
-
-### Payload Validation
-
-Malformed events are rejected before entering the processing pipeline.
-
-Example:
-
-```text
-Invalid Signature
-        ↓
-401 Unauthorized
-```
-
-```text
-Malformed Payload
-        ↓
-400 Bad Request
-```
-
-```text
-Valid Webhook
-        ↓
-200 OK
-        ↓
-Async Processing
-```
+This prevents forged webhook requests from entering the payment-processing pipeline.
 
 ---
 
-# 🔁 Idempotency & Duplicate Protection
+# 🔁 Financial Idempotency
 
-Payment infrastructure must assume that events can be delivered more than once.
+Payment systems must assume retries and duplicate event delivery.
 
-RecoverAI implements idempotency at multiple levels.
+RecoverAI protects against duplicate processing at two important layers.
 
 ## Webhook Idempotency
 
-Webhook events use a unique event identifier.
-
-Example:
-
 ```text
-Delivery 1
-→ PROCESSED
+Webhook Event ID
 
-Delivery 2
-→ DUPLICATE
+Delivery #1
+     ↓
+PROCESS
 
-Delivery 3
-→ DUPLICATE
+Delivery #2
+     ↓
+DUPLICATE
+
+Delivery #3
+     ↓
+DUPLICATE
 ```
 
-Duplicate deliveries do not create duplicate recovery processing.
+A unique database constraint on the webhook event identifier prevents the same event from being processed repeatedly.
 
 ---
 
 ## Recovery Action Idempotency
 
-Recovery actions use deterministic idempotency keys based on recovery context.
+Recovery actions use deterministic SHA-256 based idempotency keys.
 
-The implementation uses SHA-256 based idempotency keys and unique database constraints.
+```text
+Recovery Case
+      +
+Action
+      +
+Attempt Number
+      ↓
+SHA-256
+      ↓
+Unique Idempotency Key
+```
 
 Example:
 
 ```text
-CREATE_PAYMENT_LINK
+Call #1
+→ CREATE_PAYMENT_LINK
+→ Execute
 
-First request:
-→ Payment Link Created
+Call #2
+→ DUPLICATE
+→ Existing result returned
 
-Second request:
-→ Existing Result Returned
-
-Third request:
-→ Existing Result Returned
+Call #3
+→ DUPLICATE
+→ Existing result returned
 ```
 
-This prevents duplicate financial actions such as accidentally creating multiple payment links.
+This prevents accidental duplicate financial actions.
 
 ---
 
-# 🔐 Role-Based Access Control
+# 🛡️ Policy Engine Guardrails
 
-RecoverAI implements a five-level role hierarchy:
+RecoverAI treats AI recommendations as untrusted recommendations until policy validation succeeds.
+
+## Rule 1: Low Probability
+
+```text
+AI Probability = 35%
+
+Minimum Threshold = 55%
+
+        ↓
+
+❌ BLOCKED
+```
+
+---
+
+## Rule 2: High-Value Transaction
+
+```text
+Amount = ₹15,000
+
+Autonomous Approval Limit = ₹5,000
+
+        ↓
+
+⚠️ HUMAN APPROVAL REQUIRED
+```
+
+---
+
+## Rule 3: Maximum Attempts
+
+```text
+Current Attempts = 3
+Maximum Attempts = 3
+
+        ↓
+
+🛑 EXHAUSTED
+```
+
+---
+
+## Rule 4: Successful Payment
+
+```text
+Payment Captured
+       ↓
+Recovery Case
+       ↓
+RECOVERED
+       ↓
+Recovered Amount Updated
+```
+
+---
+
+# 👤 Human-in-the-Loop Architecture
+
+RecoverAI does not blindly automate high-risk financial actions.
+
+```text
+                    AI
+                    │
+                    ▼
+             Recommendation
+                    │
+                    ▼
+             Policy Engine
+                    │
+          ┌─────────┴─────────┐
+          │                   │
+          ▼                   ▼
+       SAFE                HIGH RISK
+          │                   │
+          ▼                   ▼
+      AUTOMATE          HUMAN APPROVAL
+                              │
+                              ▼
+                         OWNER / ADMIN
+                              │
+                              ▼
+                           EXECUTE
+```
+
+This provides a controlled path for high-value or sensitive recovery actions.
+
+---
+
+# 👥 Role-Based Access Control
+
+RecoverAI implements five roles:
 
 ```text
 OWNER
@@ -358,47 +537,43 @@ SUPPORT
 VIEWER
 ```
 
-### Role Responsibilities
+### Permission Model
 
-| Role    | Capabilities                                                          |
-| ------- | --------------------------------------------------------------------- |
-| OWNER   | Full system access, sensitive payment credentials, financial controls |
-| ADMIN   | Policy configuration, recovery approvals, merchant settings           |
-| ANALYST | AI analysis, recovery inspection, analytics                           |
-| SUPPORT | Customer communication and case inspection                            |
-| VIEWER  | Read-only dashboard and metrics                                       |
+| Role    | Primary Access                                    |
+| ------- | ------------------------------------------------- |
+| OWNER   | Full system + sensitive payment credentials       |
+| ADMIN   | Policies + recovery approvals + merchant settings |
+| ANALYST | AI analysis + recovery inspection                 |
+| SUPPORT | Customer communication + case inspection          |
+| VIEWER  | Read-only dashboards and metrics                  |
 
-Sensitive routes are protected using role guards.
-
-Example:
+### Example
 
 ```text
 VIEWER
-   ↓
-PUT /api/policies
-   ↓
-403 Forbidden
+   │
+   └── PUT /api/policies
+              ↓
+         ❌ 403 Forbidden
 ```
-
-While:
 
 ```text
 ADMIN
-   ↓
-PUT /api/policies
-   ↓
-200 OK
+   │
+   └── PUT /api/policies
+              ↓
+         ✅ 200 OK
 ```
 
-This enforces the principle of least privilege.
+Sensitive Razorpay credential management is restricted to the `OWNER` role.
 
 ---
 
 # ⚙️ Asynchronous Processing
 
-RecoverAI uses background processing for operations that should not block the HTTP request lifecycle.
+Payment events should not require the HTTP request to wait for every downstream operation.
 
-High-level flow:
+RecoverAI uses background processing:
 
 ```text
 Webhook
@@ -407,8 +582,6 @@ Validate
    ↓
 Persist Event
    ↓
-Queue Job
-   ↓
 BullMQ
    ↓
 Worker
@@ -416,357 +589,360 @@ Worker
 Recovery Processing
    ↓
 Database Update
+   ↓
+Analytics
 ```
 
-This separates:
-
-* API responsiveness
-* payment event ingestion
-* AI processing
-* recovery execution
-* notification/background work
+This separates request ingestion from asynchronous recovery work.
 
 ---
 
-# 🚀 Redis
-
-Redis is used for infrastructure and performance-sensitive workloads including:
-
-* Dashboard caching
-* Queue infrastructure
-* Fast access to frequently requested data
-
-The dashboard caching layer uses a short TTL to avoid unnecessary repeated aggregation work.
-
-Example cache key:
+# 🍃 Data & Infrastructure
 
 ```text
-recoverai:dashboard:${merchantId}:${days}
+                  RecoverAI API
+                       │
+          ┌────────────┼────────────┐
+          │            │            │
+          ▼            ▼            ▼
+      MongoDB        Redis        BullMQ
+          │            │            │
+          │            │            ▼
+          │            │          Worker
+          │            │            │
+          └────────────┴────────────┘
+                       │
+                       ▼
+                Recovery State
 ```
 
-Dashboard cache TTL:
+### MongoDB
 
-```text
-30 seconds
-```
+Used for persistent application and recovery state.
 
-Cache failures are handled gracefully using existing fallback behavior.
+### Redis
 
----
+Used for caching and infrastructure requiring fast in-memory access.
 
-# 🍃 MongoDB Optimization
+### BullMQ
 
-During load testing, the dashboard aggregation pipeline became a measurable bottleneck.
-
-The initial dashboard benchmark showed approximately:
-
-```text
-p95:
-1.1 seconds
-```
-
-MongoDB was performing significant aggregation work.
-
-The optimization included:
-
-### Compound Indexes
-
-Examples:
-
-```text
-{ merchantId: 1, createdAt: -1, status: 1 }
-
-{ merchantId: 1, status: 1, failureType: 1, createdAt: -1 }
-
-{ merchantId: 1, status: 1, createdAt: -1 }
-
-{ merchantId: 1, createdAt: -1, amountAtRisk: 1, recoveredAmount: 1 }
-```
-
-### Query Scoping
-
-Aggregation pipelines were aligned around:
-
-```text
-merchantId
-```
-
-using the correct MongoDB ObjectId representation.
-
-### Result
-
-After indexing and Redis caching:
-
-```text
-Dashboard p95:
-
-~1100 ms
-     ↓
-~107 ms
-```
-
-Approximately:
-
-```text
-90% latency reduction
-```
-
-Throughput improved from approximately:
-
-```text
-123 req/s
-     ↓
-304 req/s
-```
-
-under the tested dashboard workload.
-
----
-
-# 📊 Performance Engineering
-
-RecoverAI was load tested using **k6**.
-
-## Health Endpoint Scaling
-
-Tested up to:
-
-```text
-1,000 VUs
-```
-
-Observed peak:
-
-```text
-~2,164 requests/sec
-```
-
-Error rate:
-
-```text
-0.00%
-```
-
----
-
-## Scaling Results
-
-|   VUs | Requests |     Throughput | Avg Latency |       p95 | Errors |
-| ----: | -------: | -------------: | ----------: | --------: | -----: |
-|    50 |   15,486 |   ~154.8 req/s |    ~0.74 ms |  ~1.39 ms |     0% |
-|   100 |   42,577 |   ~327.5 req/s |    ~0.68 ms |  ~1.30 ms |     0% |
-|   500 |  146,788 | ~1,333.8 req/s |    ~58.1 ms | ~167.7 ms |     0% |
-| 1,000 |  346,452 | ~2,164.2 req/s |    ~82.4 ms | ~214.0 ms |     0% |
-
-These results represent the tested local development environment and workload, not a claim of production capacity.
-
----
-
-# 📈 Dashboard Performance Optimization
-
-### Before Optimization
-
-```text
-100 VU
-
-Average:
-245 ms
-
-p95:
-1,100 ms
-
-p99:
-1,170 ms
-
-Throughput:
-~123 req/s
-```
-
-### After Optimization
-
-```text
-100 VU
-
-Average:
-38.69 ms
-
-p95:
-107.29 ms
-
-p99:
-128.05 ms
-
-Throughput:
-~304 req/s
-
-Error Rate:
-0%
-```
-
-### Improvement
-
-```text
-p95 latency:
-~90% reduction
-
-Throughput:
-~2.47× increase
-```
-
-This optimization was driven by identifying the database aggregation bottleneck and combining query/index improvements with Redis caching.
+Used for asynchronous background jobs.
 
 ---
 
 # 🧪 Automated Testing
 
-RecoverAI includes unit and integration tests covering critical financial workflows.
+Critical financial and security workflows are covered by automated tests.
 
-Latest full suite:
+## Latest Full Suite
 
 ```text
 Test Suites: 6 passed
 Tests:       21 passed
+Failures:    0
 ```
 
-Covered areas include:
+### Covered
 
 ```text
-✓ Encryption
-✓ Policy Engine
-✓ Webhook Idempotency
-✓ Recovery Action Idempotency
-✓ Recovery Edge Cases
-✓ Webhook Security
-✓ RBAC
+✅ Encryption
+✅ Policy Engine
+✅ Webhook Idempotency
+✅ Recovery Action Idempotency
+✅ Recovery Edge Cases
+✅ Webhook Security
+✅ RBAC
 ```
 
 ---
 
-# 🧪 Recovery Edge Cases
+# 🧪 Recovery Edge-Case Matrix
 
-The system was tested against important recovery safety scenarios.
+| Scenario        | Input   | Expected Behavior | Result |
+| --------------- | ------- | ----------------- | ------ |
+| Low probability | 35%     | Block recovery    | ✅      |
+| High amount     | ₹15,000 | Human approval    | ✅      |
+| Max attempts    | 3 / 3   | Stop / exhausted  | ✅      |
+| Payment success | ₹3,500  | Mark recovered    | ✅      |
 
-## 1. Low Recovery Probability
+---
+
+# 🚦 Rate Limiting
+
+RecoverAI includes endpoint-level rate limiting.
+
+Configured categories include:
 
 ```text
+AUTH      → 10 requests / 15 minutes
+API       → 100 requests / minute
+AI        → 20 requests / minute
+WEBHOOK   → 500 requests / minute
+```
+
+During testing, rate limiting was intentionally observed and verified.
+
+Example:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Too many API requests, please slow down."
+  }
+}
+```
+
+For controlled k6 benchmarking, a dedicated `LOAD_TEST_MODE` was introduced so artificial development rate limits do not distort capacity measurements.
+
+---
+
+# 💳 Payment Simulator
+
+RecoverAI includes a controlled test/demo environment for demonstrating the complete recovery lifecycle without transferring real money.
+
+```text
+🧪 TEST MODE
+No real money is transferred.
+```
+
+The simulator can demonstrate scenarios such as:
+
+```text
+💸 Failed Payment
+🤖 AI Analysis
+🛡️ Policy Decision
+👤 Human Approval
+🔗 Recovery Payment Link
+🔁 Duplicate Webhook
+✅ Successful Payment
+💰 Revenue Recovered
+```
+
+---
+
+# 🎬 Recommended 5-Minute Demo
+
+The strongest demo is not a feature tour.
+
+It should tell one complete story.
+
+## Scene 1: Payment Failure
+
+```text
+Customer attempts ₹3,500 payment
+             ↓
+Payment fails
+             ↓
+Failure reason displayed
+```
+
+---
+
+## Scene 2: Webhook
+
+```text
+payment.failed
+       ↓
+HMAC verification
+       ↓
+Event accepted
+       ↓
+Idempotency check
+       ↓
+Queue
+```
+
+---
+
+## Scene 3: AI Analysis
+
+```text
+Recovery Case Created
+
 Probability:
-35%
+82%
 
-Minimum:
-55%
-
-Result:
-BLOCKED
+Recommended Action:
+CREATE_PAYMENT_LINK
 ```
 
 ---
 
-## 2. High-Value Transaction
+## Scene 4: Policy Engine
 
 ```text
-Amount:
-₹15,000
-
-Result:
-HUMAN APPROVAL REQUIRED
-```
-
----
-
-## 3. Maximum Attempts
-
-```text
-Attempts:
-3 / 3
-
-Result:
-EXHAUSTED
-```
-
----
-
-## 4. Successful Payment
-
-```text
-Payment:
-₹3,500
-
-Result:
-RECOVERED
-```
-
----
-
-# 🔄 End-to-End Recovery Lifecycle
-
-The primary RecoverAI flow is:
-
-```text
-Customer
-   ↓
-Payment Attempt
-   ↓
-Payment Failed
-   ↓
-payment.failed Webhook
-   ↓
-Signature Verification
-   ↓
-Idempotency Check
-   ↓
-Recovery Case
-   ↓
-AI Analysis
-   ↓
+AI Recommendation
+       ↓
 Policy Engine
-   ↓
-┌───────────────────────┐
-│                       │
-▼                       ▼
-APPROVED             BLOCKED
-│                       │
-▼                       ▼
-Recovery Action       STOP
-│
-▼
-Payment Link / Retry
-│
-▼
-Customer Payment
-│
-▼
+       ↓
+Probability OK
+Amount OK
+Attempts OK
+       ↓
+✅ APPROVED
+```
+
+---
+
+## Scene 5: Recovery
+
+```text
+Payment Link Generated
+       ↓
+Customer retries
+       ↓
+Payment successful
+```
+
+---
+
+## Scene 6: Captured Webhook
+
+```text
 payment.captured
-│
-▼
-Webhook Verification
-│
-▼
+       ↓
+Signature verification
+       ↓
+Idempotency
+       ↓
 Worker
-│
-▼
-Recovery Case
-│
-▼
-RECOVERED
-│
-▼
-Dashboard Analytics
+       ↓
+Recovery = RECOVERED
+```
+
+---
+
+## Scene 7: Dashboard
+
+Show:
+
+```text
+Recovered Revenue
+Recovery Rate
+Failed Payments
+Recovery Funnel
+Recovery Cases
+Payment Status
+```
+
+Then demonstrate one safety scenario:
+
+```text
+₹15,000
+   ↓
+Human Approval Required
+   ↓
+ADMIN / OWNER approval
+```
+
+Finally show duplicate webhook protection:
+
+```text
+Webhook #1 → Processed
+Webhook #2 → Duplicate
+```
+
+This gives the evaluator a complete story:
+
+> **Failure → Intelligence → Safety → Recovery → Verification → Revenue**
+
+---
+
+# 🏗️ High-Level Architecture
+
+```text
+                         ┌──────────────────┐
+                         │     Customer     │
+                         └────────┬─────────┘
+                                  │
+                                  ▼
+                         ┌──────────────────┐
+                         │ Payment Provider │
+                         └────────┬─────────┘
+                                  │
+                         payment.failed
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │ Webhook Controller  │
+                       └──────────┬──────────┘
+                                  │
+                          HMAC Verification
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │ Idempotency Layer   │
+                       └──────────┬──────────┘
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │      BullMQ         │
+                       │       Queue         │
+                       └──────────┬──────────┘
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │       Worker        │
+                       └──────────┬──────────┘
+                                  │
+                         ┌────────┴────────┐
+                         │                 │
+                         ▼                 ▼
+                  ┌─────────────┐   ┌─────────────┐
+                  │ AI Analysis │   │Policy Engine│
+                  └──────┬──────┘   └──────┬──────┘
+                         │                 │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │ Recovery Service    │
+                       └──────────┬──────────┘
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │ Payment Provider    │
+                       └──────────┬──────────┘
+                                  │
+                         payment.captured
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │ Webhook + Worker    │
+                       └──────────┬──────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │    RECOVERED    │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │    Dashboard    │
+                         └─────────────────┘
+
+          ┌──────────────┐        ┌──────────────┐
+          │   MongoDB    │        │    Redis     │
+          │ Persistent   │        │ Cache / Fast │
+          │ State        │        │ Access       │
+          └──────────────┘        └──────────────┘
 ```
 
 ---
 
 # 💻 Technology Stack
 
-## Frontend
+### Frontend
 
 ```text
 React
 TypeScript
-Modern component-based UI
-Responsive dashboard
+Modern Dashboard UI
 ```
 
-## Backend
+### Backend
 
 ```text
 Node.js
@@ -776,288 +952,58 @@ JWT Authentication
 RBAC
 ```
 
-## Data & Infrastructure
+### Database
 
 ```text
 MongoDB
 Mongoose
+```
+
+### Infrastructure
+
+```text
 Redis
 BullMQ
 ```
 
-## AI
+### AI
 
 ```text
-AI-powered payment recovery analysis
-Recovery probability estimation
-Action recommendation
+AI Recovery Analysis
+Recovery Probability
+Action Recommendation
 ```
 
-## Payments
+### Payments
 
 ```text
-Razorpay Test Mode
-Payment Events
+Razorpay
 Payment Links
+Payment Events
 Webhooks
+Test/Simulation Mode
 ```
 
-## Security
+### Security
 
 ```text
 JWT
 RBAC
 HMAC-SHA256
-crypto.timingSafeEqual
+Timing-Safe Signature Verification
 Encryption
 Idempotency
 Rate Limiting
 ```
 
-## Testing & Performance
+### Testing
 
 ```text
 Jest
-Integration Testing
-k6
-Load Testing
+Integration Tests
+k6 Load Testing
 Performance Profiling
 ```
-
----
-
-# 🏗️ High-Level Architecture
-
-```text
-                         ┌─────────────────────┐
-                         │      Customer       │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Payment / Razorpay  │
-                         └──────────┬──────────┘
-                                    │
-                         payment.failed
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Webhook Controller  │
-                         └──────────┬──────────┘
-                                    │
-                         HMAC Verification
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Idempotency Layer   │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │      BullMQ         │
-                         │       Queue         │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │      Worker         │
-                         └──────────┬──────────┘
-                                    │
-                    ┌───────────────┴───────────────┐
-                    │                               │
-                    ▼                               ▼
-          ┌──────────────────┐             ┌──────────────────┐
-          │   AI Analysis    │             │   Policy Engine  │
-          └────────┬─────────┘             └────────┬─────────┘
-                   │                                │
-                   └───────────────┬────────────────┘
-                                   │
-                                   ▼
-                         ┌─────────────────────┐
-                         │  Recovery Service   │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Payment Provider    │
-                         └──────────┬──────────┘
-                                    │
-                              Payment Captured
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Webhook + Worker    │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Recovery = RECOVERED│
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ Analytics Dashboard │
-                         └─────────────────────┘
-
-       ┌──────────────┐              ┌──────────────┐
-       │   MongoDB    │              │    Redis     │
-       │ Transactional│              │ Cache/Queue  │
-       │    State     │              │ Infrastructure│
-       └──────────────┘              └──────────────┘
-```
-
----
-
-# 🔒 Security Architecture
-
-RecoverAI follows multiple security boundaries:
-
-```text
-Authentication
-      ↓
-JWT
-      ↓
-RBAC
-      ↓
-Input Validation
-      ↓
-Webhook Signature Verification
-      ↓
-Idempotency
-      ↓
-Policy Engine
-      ↓
-Authorized Recovery Action
-```
-
-Sensitive payment credentials are protected and are never intended to be exposed through the frontend.
-
----
-
-# 🎮 Demo Mode
-
-RecoverAI includes a controlled test/demo environment.
-
-```text
-TEST MODE
-```
-
-The demo allows simulation of:
-
-* Failed payment
-* Successful payment
-* AI analysis
-* Policy approval
-* Human approval
-* Low-probability blocking
-* Maximum-attempt exhaustion
-* Duplicate webhook delivery
-
-### Important
-
-```text
-TEST MODE — No real money is transferred.
-```
-
-Demo mode does not replace the core security architecture.
-
----
-
-# 🎬 Winning Demo Flow
-
-The recommended project demonstration is:
-
-```text
-1. Customer starts a ₹3,500 payment
-
-2. Payment fails because of insufficient funds
-
-3. payment.failed webhook arrives
-
-4. Signature is verified
-
-5. Duplicate protection is checked
-
-6. Recovery Case is created
-
-7. AI calculates recovery probability
-
-8. AI recommends CREATE_PAYMENT_LINK
-
-9. Policy Engine evaluates the recommendation
-
-10. Policy Engine approves
-
-11. Recovery payment link is created
-
-12. Customer retries payment
-
-13. Payment succeeds
-
-14. payment.captured webhook arrives
-
-15. Webhook is verified
-
-16. Worker processes the event
-
-17. Recovery Case becomes RECOVERED
-
-18. Dashboard updates recovered revenue
-
-19. Audit trail records the complete lifecycle
-```
-
----
-
-# 🧩 Safety Demonstration
-
-RecoverAI can also demonstrate:
-
-### Low Probability
-
-```text
-35%
-↓
-Policy threshold: 55%
-↓
-BLOCKED
-```
-
-### High Value
-
-```text
-₹15,000
-↓
-Autonomous limit exceeded
-↓
-HUMAN APPROVAL
-```
-
-### Maximum Attempts
-
-```text
-3 / 3
-↓
-EXHAUSTED
-↓
-STOP
-```
-
-### Duplicate Webhook
-
-```text
-First delivery
-↓
-PROCESSED
-
-Second delivery
-↓
-DUPLICATE
-
-No duplicate recovery action
-```
-
-These scenarios demonstrate that the system is designed for controlled automation rather than unrestricted AI execution.
 
 ---
 
@@ -1094,65 +1040,18 @@ RecoverAI/
 
 # 🚀 Getting Started
 
-## 1. Clone
+## Clone
 
 ```bash
 git clone <YOUR_GITHUB_REPOSITORY_URL>
 cd RecoverAI
 ```
 
-## 2. Install dependencies
-
-### Server
-
-```bash
-cd server
-npm install
-```
-
-### Client
-
-```bash
-cd ../client
-npm install
-```
-
----
-
-## 3. Configure Environment
-
-Create the required environment configuration based on the project's existing `.env` setup.
-
-Example:
-
-```env
-MONGODB_URI=mongodb://localhost:27017/recoverai
-REDIS_URL=redis://localhost:6379
-
-LOAD_TEST_MODE=false
-DEMO_MODE=true
-```
-
-Never commit secrets.
-
-Do not commit:
-
-```text
-.env
-JWT_SECRET
-RAZORPAY_KEY_SECRET
-WEBHOOK_SECRET
-ENCRYPTION_KEY
-```
-
----
-
-# ▶️ Run the Project
-
 ## Backend
 
 ```bash
 cd server
+npm install
 npm run dev
 ```
 
@@ -1162,7 +1061,7 @@ Backend:
 http://localhost:5000
 ```
 
-Health:
+Health check:
 
 ```text
 http://localhost:5000/health
@@ -1172,6 +1071,7 @@ http://localhost:5000/health
 
 ```bash
 cd client
+npm install
 npm run dev
 ```
 
@@ -1179,145 +1079,228 @@ npm run dev
 
 # 🧪 Run Tests
 
-From the server directory:
-
 ```bash
+cd server
 npx jest --forceExit
 ```
 
-Expected critical test coverage includes:
+Expected result:
 
 ```text
-Encryption
-Policy Engine
-Idempotency
-Recovery Edge Cases
-Webhook Security
-RBAC
+6 Test Suites Passed
+21 Tests Passed
+0 Failed
 ```
 
 ---
 
-# 📊 Run Load Test
+# 📈 Run Load Test
 
-From the project root:
+From project root:
 
 ```bash
 k6 run load-test.js
 ```
 
-The load-testing configuration can be adjusted according to the desired workload.
-
-For controlled performance experiments, the project supports a dedicated load-test configuration that prevents development rate limits from artificially limiting benchmark traffic.
-
 ---
 
-# 📌 Engineering Highlights
+# 🔐 Environment Variables
 
-The strongest engineering aspects of RecoverAI are:
+Example local configuration:
 
-### 1. AI + Deterministic Safety
-
-AI produces recommendations, while the Policy Engine controls authorization.
-
-### 2. Financial Idempotency
-
-Duplicate webhook deliveries and repeated recovery actions are prevented from creating duplicate financial operations.
-
-### 3. Secure Webhooks
-
-HMAC-SHA256 verification and timing-safe comparison protect the payment event boundary.
-
-### 4. Human-in-the-Loop
-
-High-risk transactions can be escalated rather than autonomously executed.
-
-### 5. Distributed Processing
-
-BullMQ workers separate asynchronous recovery processing from API requests.
-
-### 6. Database Optimization
-
-Compound indexes and correctly scoped aggregation pipelines reduce MongoDB query workload.
-
-### 7. Redis Caching
-
-Dashboard aggregation results are cached to reduce repeated database computation.
-
-### 8. RBAC
-
-Five roles enforce least-privilege access to financial and operational actions.
-
-### 9. Automated Testing
-
-Critical security, policy, idempotency, and recovery workflows are covered by automated tests.
-
-### 10. Performance Engineering
-
-The system was benchmarked using k6 across 50, 100, 500 and 1,000 VU levels.
-
----
-
-# 🏆 What I Learned
-
-Building RecoverAI required thinking beyond simply making APIs work.
-
-The project involved solving problems around:
-
-```text
-AI reliability
-Financial safety
-Distributed systems
-Database performance
-Caching
-Asynchronous processing
-Webhook security
-Idempotency
-Authorization
-Testing
-Load testing
-Observability
+```env
+MONGODB_URI=mongodb://localhost:27017/recoverai
+REDIS_URL=redis://localhost:6379
+LOAD_TEST_MODE=false
 ```
 
-One of the most important lessons was:
+Additional application secrets should be configured through environment variables.
 
-> **In financial systems, correctness and safety matter just as much as raw performance.**
+### Never commit:
 
-A fast system that executes the same financial action twice is still a broken system.
+```text
+.env
+JWT secrets
+Razorpay secrets
+Webhook secrets
+Encryption keys
+API credentials
+```
+
+---
+
+# 📌 Engineering Decisions
+
+## Why Redis?
+
+To reduce repeated dashboard aggregation work and improve read latency.
+
+## Why MongoDB Compound Indexes?
+
+Because dashboard queries frequently filter by merchant and then use status/date-related fields.
+
+## Why BullMQ?
+
+To move asynchronous processing away from the synchronous API request path.
+
+## Why Idempotency?
+
+Because payment providers and networks can retry requests and webhook deliveries.
+
+## Why Policy Engine?
+
+Because AI output should not directly authorize financial actions.
+
+## Why RBAC?
+
+Because different users should have different levels of access to sensitive financial operations.
+
+## Why Human Approval?
+
+Because high-value financial actions should be capable of being escalated instead of blindly automated.
+
+## Why k6?
+
+To quantify concurrency, throughput, latency, and failure behavior instead of relying on manual testing.
+
+---
+
+# 🧠 Engineering Lessons
+
+RecoverAI was designed around a key principle:
+
+> **A financially intelligent system must be correct, safe, observable, and recoverable, not merely fast.**
+
+The project demonstrates practical engineering around:
+
+```text
+AI Systems
+      +
+Backend Architecture
+      +
+Distributed Processing
+      +
+Database Optimization
+      +
+Caching
+      +
+Security
+      +
+Authorization
+      +
+Financial Idempotency
+      +
+Testing
+      +
+Performance Engineering
+```
 
 ---
 
 # 🔮 Future Improvements
 
-Potential future improvements include:
+Potential production-oriented extensions include:
 
 * Adaptive recovery strategies based on historical outcomes
-* More sophisticated customer segmentation
-* ML-based recovery prediction
-* Notification channel optimization
+* ML-based recovery probability models
+* Customer segmentation
+* Recovery strategy experimentation
+* Multi-payment-provider support
 * Advanced fraud/risk scoring
-* Multi-provider payment support
-* Production-grade distributed deployment
 * Horizontal worker scaling
-* Advanced observability with metrics and tracing
-* Automated recovery strategy experimentation
-* Merchant-level policy customization
-* A/B testing of recovery strategies
+* Distributed deployment
+* Observability with metrics and tracing
+* Advanced notification optimization
+* Merchant-specific policy configuration
+* Recovery strategy A/B testing
+
+---
+
+# 📸 Demo & Evidence
+
+Add your actual project evidence here:
+
+### 🎥 Demo Video
+
+`[ Watch the 5-Minute Demo ]`
+
+### 🖥️ Live Demo
+
+`[ Open RecoverAI ]`
+
+### 📊 Performance Report
+
+`[ View Benchmark Results ]`
+
+### 🧪 Test Report
+
+`[ View Test Results ]`
+
+### 🏗️ Architecture
+
+`[ View Architecture Diagram ]`
+
+---
+
+# 🏆 Project Highlights
+
+<div align="center">
+
+### 🤖 AI
+
+**Recovery Intelligence**
+
+### 🛡️ POLICY
+
+**Deterministic Guardrails**
+
+### 🔐 SECURITY
+
+**HMAC + RBAC + Encryption**
+
+### 🔁 IDEMPOTENCY
+
+**Duplicate Financial Action Protection**
+
+### ⚡ PERFORMANCE
+
+**2,164 req/s @ 1,000 VUs**
+
+### 📈 OPTIMIZATION
+
+**90.2% Dashboard p95 Improvement**
+
+### 🧪 TESTING
+
+**21/21 Automated Tests Passed**
+
+### 👤 HUMAN CONTROL
+
+**High-Risk Approval Workflow**
+
+</div>
+
+---
+
+# 🥇 The One-Line Pitch
+
+> **RecoverAI is an AI-powered payment recovery platform where AI recommends recovery strategies, deterministic policies authorize them, secure webhooks and idempotency protect financial operations, and automated recovery turns failed payments into recovered revenue.**
 
 ---
 
 # 👨‍💻 Author
 
-**Amit**
+## Amit
 
-Software Engineer | Full-Stack Developer
+**Software Engineer | Full-Stack Developer**
 
-Built with:
+Built using:
 
 ```text
 React
-Node.js
 TypeScript
+Node.js
+Express
 MongoDB
 Redis
 BullMQ
@@ -1329,41 +1312,10 @@ k6
 
 ---
 
-# ⭐ Project Philosophy
+# 📜 Disclaimer
 
-RecoverAI is built around one principle:
+RecoverAI's demonstration and simulator flows are intended for controlled testing and demonstration.
 
-```text
-                    AI
-                     │
-              Recommendation
-                     │
-                     ▼
-              Policy Engine
-                     │
-               Authorization
-                     │
-                     ▼
-             Recovery Service
-                     │
-                Execution
-                     │
-                     ▼
-               Payment System
-```
+> **TEST MODE — No real money is transferred.**
 
-### AI should make systems smarter.
-
-### Policies should make them safer.
-
-### Engineering should make them reliable.
-
----
-
-## 📜 Disclaimer
-
-RecoverAI's payment demonstrations use test/demo flows.
-
-**TEST MODE — No real money is transferred.**
-
-Production payment credentials, secrets, and sensitive financial information must never be committed to source control.
+Production deployment requires appropriate payment-provider configuration, secret management, infrastructure hardening, monitoring, compliance controls, and security review.
