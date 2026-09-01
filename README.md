@@ -52,52 +52,54 @@ Payment Attempt
 END
 ```
 
-RecoverAI turns it into:
+RecoverAI Architecture:
 
 ```text
-Customer
+Customer / Merchant
+        ↓
+     Razorpay
+        ↓
+ Webhook Ingestion
+        ↓
+Signature Verification
+        +
+   Idempotency
+        ↓
+   Redis + BullMQ
+        ↓
+ Worker Service
+        ↓
+ ┌───────────────────┐
+ │    AI Engine      │
+ │ Probability       │
+ │ Failure Analysis  │
+ │ Recommendation    │
+ └─────────┬─────────┘
+           ↓
+ ┌───────────────────┐
+ │   Policy Engine   │
+ │ Amount Limit      │
+ │ Probability       │
+ │ Max Attempts      │
+ └─────────┬─────────┘
+           ↓
+   ┌───────┴────────┐
+   ↓                ↓
+ APPROVE         ESCALATE
+   ↓                ↓
+Recovery       Human Approval
    ↓
-Payment Attempt
+Payment Link / Notification
    ↓
-❌ Payment Failed
+Customer Pays
    ↓
-Webhook
+payment.captured
    ↓
-🔐 Verify Signature
+Webhook Verification
    ↓
-🔁 Check Idempotency
+RECOVERED
    ↓
-📦 Create Recovery Case
-   ↓
-🤖 AI Analysis
-   ↓
-🛡️ Policy Engine
-   ↓
-┌──────────────────────┐
-│                      │
-▼                      ▼
-APPROVED             BLOCKED
-│                      │
-▼                      ▼
-Recovery Action      STOP
-│
-▼
-Customer Retry
-│
-▼
-✅ Payment Captured
-│
-▼
-Webhook
-│
-▼
-⚙️ Worker
-│
-▼
-💰 RECOVERED
-│
-▼
-📊 Dashboard
+Analytics + Audit Trail
 ```
 
 ---
@@ -1294,20 +1296,35 @@ Add your actual project evidence here:
 
 **Software Engineer | Full-Stack Developer**
 
-Built using:
+Technology Layer:
 
 ```text
-React
-TypeScript
-Node.js
-Express
+Frontend
+Next.js + TypeScript + TailwindCSS
+
+Backend
+Node.js + Express + TypeScript
+
+Database
 MongoDB
-Redis
-BullMQ
+
+Cache / Queue
+Redis + BullMQ
+
 AI
+LLM + deterministic decision logic
+
+Payment
 Razorpay
-Jest
-k6
+
+Testing
+Jest + k6
+
+Security
+JWT + RBAC + HMAC-SHA256 + Encryption
+
+Deployment / DevOps
+Docker + Nginx + GitHub Actions
 ```
 
 ---
