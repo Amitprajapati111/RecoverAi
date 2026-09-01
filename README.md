@@ -186,7 +186,7 @@ It demonstrates how AI can be integrated into a **safety-critical financial work
 RecoverAI was benchmarked using **k6** across multiple concurrency levels.
 
 ## 🚀 Scaling Benchmark
-https://github.com/Amitprajapati111/RecoverAi/blob/main/Screenshot%202026-08-22%20173816.png?raw=true
+![image alt](https://github.com/Amitprajapati111/RecoverAi/blob/main/Screenshot%202026-08-22%20173816.png?raw=true)
 
 | Peak VUs | Total Requests |         Throughput | Avg Latency |           p95 | Error Rate |
 | -------: | -------------: | -----------------: | ----------: | ------------: | ---------: |
